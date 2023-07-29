@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-vue
+  labels:
+    app: app-vue
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-vue
+  template:
+    metadata:
+      labels:
+        app: app-vue
+    spec:
+      containers:
+      - name: app-vue
+        image: asia.gcr.io/total-messenger-391312/app-gcp
+          #imagePullPolicy: Never
+        resources:
+          limits: 
+            memory: 2048Mi
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-svc
+spec:
+  type: LoadBalancer
+  selector:
+    app: app-vue
+  ports:
+  - name: app-vue
+    port: 80
+
